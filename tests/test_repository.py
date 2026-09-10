@@ -17,3 +17,14 @@ def test_repository_update_preserves_customer_id():
     repo.add(customer)
     repo.update_email(10, "new@example.com", "agent")
     assert repo.get(10).customer_id == 10
+
+
+def test_repository_update_email_updates_email_and_audit():
+    repo = CustomerRepository()
+    customer = Customer(10, "Ana", "ana@example.com", "admin", "admin")
+    repo.add(customer)
+    updated = repo.update_email(10, "NEW_MAIL@example.com", "agent_2")
+    assert updated.email == "new_mail@example.com"
+    assert updated.updated_by == "agent_2"
+    assert repo.get(10).email == "new_mail@example.com"
+    assert repo.get(10).updated_by == "agent_2"
